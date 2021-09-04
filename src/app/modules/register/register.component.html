@@ -1,0 +1,54 @@
+<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
+
+    <mat-card class="box">
+      <mat-card-header>
+        <mat-card-title>Register New User</mat-card-title>
+      </mat-card-header>
+  
+      <form [formGroup]="registerForm" (ngSubmit)="doRegister()">
+        <mat-card-content>
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Email" type="email" formControlName="email">
+            </mat-form-field>
+            <div class="w3-panel w3-red"  *ngIf="registerForm.controls.email.invalid && (registerForm.controls.email.dirty || registerForm.controls.email.touched)">Please enter valid email address</div> 
+    
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="Username" type="text" formControlName="username">
+          </mat-form-field>
+          <div class="w3-panel w3-red"  *ngIf="registerForm.controls.username.invalid && (registerForm.controls.username.dirty || registerForm.controls.username.touched)">Please enter valid Username</div> 
+  
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="Password" type="password" formControlName="password">
+          </mat-form-field>
+          <div class="w3-panel w3-red"  *ngIf="registerForm.controls.password.invalid && (registerForm.controls.password.dirty || registerForm.controls.password.touched)">Password is required</div>
+         
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="Confirm Password" type="password" formControlName="password2">
+          </mat-form-field>
+          <div class="w3-panel w3-red"  *ngIf="registerForm.controls.password2.invalid && (registerForm.controls.password2.dirty || registerForm.controls.password2.touched)">Confirm Password is required</div>
+
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="Phone No" type="text" formControlName="phone_no">
+          </mat-form-field>
+          <div class="w3-panel w3-red"  *ngIf="registerForm.controls.phone_no.invalid && (registerForm.controls.phone_no.dirty || registerForm.controls.phone_no.touched)">Phone No. is required</div>
+
+
+          <mat-form-field appearance="fill" class="example-full-width">
+            <mat-label>Select Company</mat-label>
+            <mat-select formControlName="org_id">
+              <mat-option *ngFor="let company of companies" value="{{company.id}}">{{company.comp_name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="fill" class="example-full-width">
+            <mat-label>Select Role</mat-label>
+            <mat-select formControlName="role">
+              <mat-option *ngFor="let role of roles" value="{{role.id}}">{{role.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        </mat-card-content>
+        <button  mat-raised-button color="primary" class="btn-block" type="submit" [disabled]="!registerForm.valid">Register</button>
+      </form>
+    </mat-card>
+  
+  </div>

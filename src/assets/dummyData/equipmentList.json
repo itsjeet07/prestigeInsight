@@ -1,0 +1,112 @@
+[
+    {
+        "id": 5,
+        "area": 11,
+        "equipment_name": "Fan 1",
+        "equipment_type": "Type-1",
+        "equipment_class": "Class-1",
+        "equipment_id": "245.00",
+        "equipment_description": "Fan 3 faridabad",
+        "org_id": 17
+    },
+    {
+        "id": 6,
+        "area": 11,
+        "equipment_name": "Fan 2",
+        "equipment_type": "Type-2",
+        "equipment_class": "Class-2",
+        "equipment_id": "645.00",
+        "equipment_description": "Fan 2 faridabad",
+        "org_id": 17
+    },
+    {
+        "id": 7,
+        "area": 13,
+        "equipment_name": "Fan 3",
+        "equipment_type": "Type-3",
+        "equipment_class": "Class-3",
+        "equipment_id": "615.00",
+        "equipment_description": "Fan 3 faridabad",
+        "org_id": 17
+    },
+    {
+        "id": 8,
+        "area": 13,
+        "equipment_name": "Fan 4",
+        "equipment_type": "Type-4",
+        "equipment_class": "Class-4",
+        "equipment_id": "616.00",
+        "equipment_description": "Fan 4 faridabad",
+        "org_id": 17
+    },
+    {
+        "id": 9,
+        "area": 14,
+        "equipment_name": "Fan 5",
+        "equipment_type": "Type-5",
+        "equipment_class": "Class-5",
+        "equipment_id": "916.00",
+        "equipment_description": "Fan 5 faridabad",
+        "org_id": 17
+    },
+    {
+        "id": 10,
+        "area": 14,
+        "equipment_name": "test",
+        "equipment_type": "test2",
+        "equipment_class": "test3",
+        "equipment_id": "916.00",
+        "equipment_description": "Fan 5 faridabad",
+        "org_id": 17
+    },
+    {
+        "id": 11,
+        "area": 14,
+        "equipment_name": "test",
+        "equipment_type": "test2",
+        "equipment_class": "test3",
+        "equipment_id": "916.00",
+        "equipment_description": "Fan 5 faridabad",
+        "org_id": 17
+    },
+    {
+        "id": 12,
+        "area": 5,
+        "equipment_name": "a",
+        "equipment_type": "a",
+        "equipment_class": "a",
+        "equipment_id": "1.00",
+        "equipment_description": "a",
+        "org_id": 12
+    },
+    {
+        "id": 13,
+        "area": 15,
+        "equipment_name": "adwwda",
+        "equipment_type": "dwa",
+        "equipment_class": "adw",
+        "equipment_id": "1.00",
+        "equipment_description": "awd",
+        "org_id": 13
+    },
+    {
+        "id": 14,
+        "area": 18,
+        "equipment_name": "wadwda",
+        "equipment_type": "efef",
+        "equipment_class": "feewe",
+        "equipment_id": "12.00",
+        "equipment_description": "feffe",
+        "org_id": 13
+    },
+    {
+        "id": 15,
+        "area": 15,
+        "equipment_name": "weqe",
+        "equipment_type": "thhth",
+        "equipment_class": "thth",
+        "equipment_id": "12.00",
+        "equipment_description": "yjyy",
+        "org_id": 13
+    }
+]

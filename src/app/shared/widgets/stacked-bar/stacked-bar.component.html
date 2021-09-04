@@ -1,0 +1,7 @@
+<div class="stacked-bar-graph" *ngIf="finalData && finalData.length>0">
+    <span *ngFor="let item of finalData; let i = index;" [ngStyle]="{'width': item.width + '%'}"
+        class="bar-{{i+1}} tooltip">
+        <span class="tooltiptext bar-{{i+1}}">{{
+            item.percentage + '%'}}</span>
+    </span>
+</div>

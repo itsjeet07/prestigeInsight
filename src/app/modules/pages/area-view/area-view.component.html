@@ -1,0 +1,153 @@
+<br />
+<mat-divider></mat-divider>
+<!--
+<section class="headerSection">
+    <div class="example-label">Select Equipment: </div>
+    <div class="example-label">
+      <div fxFlex="100">
+        <button mat-icon-button [matMenuTriggerFor]="menuEquipment" aria-label="Example icon-button with a menu">
+          {{selectedEquipment.name}} <mat-icon>arrow_drop_down</mat-icon>
+        </button>
+        <mat-menu #menuEquipment="matMenu">
+          <button mat-menu-item *ngFor="let equipment of equipmentList" (click)="getEquipmentData(equipment)">
+            <span>{{equipment.name}}</span>
+          </button>
+        </mat-menu>
+      </div>
+    </div>
+</section>
+-->
+<!-- <section class="headerSection">
+  <div class="example-label">Equipment List</div>
+  <div class="example-button-row">
+  </div>
+</section>
+<div fxLayout="row" fxLayoutAlign="space between center" fxLayoutGap="20px">
+  <div fxFlex="100">
+    <div>
+      <table mat-table [dataSource]="dataSourceEq">
+        <ng-container matColumnDef="equipment_id">
+          <th mat-header-cell *matHeaderCellDef> Equipment Id </th>
+          <td mat-cell *matCellDef="let element"> {{element.equipment_id}} </td>
+        </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Equipment Name </th>
+          <td mat-cell *matCellDef="let element; let i = index">
+            <a mat-flat-button (click)="getEquipmentData(element)"> {{element.name}}</a>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef> Description </th>
+          <td mat-cell *matCellDef="let element">{{element.description}}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsEq"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsEq;"></tr>
+      </table>
+
+      <mat-paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
+    </div>
+
+
+  </div>
+</div> -->
+
+<!--
+<br/>
+<mat-divider></mat-divider>
+<section class="headerSection">
+    <div class="example-label">Area</div>
+    <div class="example-label">{{apiData.area_name}}</div>
+    <div class="example-button-row">
+      <div fxFlex="50">
+        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+            {{activeChart}} <mat-icon>arrow_drop_down</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="drawTimelineChart('quater')">
+              <span>Quaterly</span>
+            </button>
+            <button mat-menu-item (click)="drawTimelineChart('month')">
+              <span>Monthly</span>
+            </button>
+            <button mat-menu-item  (click)="drawTimelineChart('week')">
+              <span>Weekly</span>
+            </button>
+          </mat-menu>
+      </div>
+    </div>
+</section>
+
+<div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px" class="stats-cards">
+    <mat-card fxFlex="100">
+        <app-widget-line-chart [data]="lineChartData"></app-widget-line-chart>
+    </mat-card>
+</div>
+-->
+<br />
+<mat-divider></mat-divider>
+
+<section class="headerSection">
+  <div class="example-label">Equipment Selected - {{selectedEquipment && selectedEquipment.name}}</div>
+  <div class="example-button-row">
+  </div>
+</section>
+
+<div fxLayout="row" fxLayoutAlign="space between center" fxLayoutGap="20px">
+  <div fxFlex="100">
+    <div>
+      <table mat-table [dataSource]="dataSource">
+
+        <ng-container matColumnDef="asset_id">
+          <th mat-header-cell *matHeaderCellDef> Asset Id </th>
+          <td mat-cell *matCellDef="let element"> {{element.asset_id}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="asset_score">
+          <th mat-header-cell *matHeaderCellDef> Asset Score </th>
+          <td mat-cell *matCellDef="let element"> {{element.asset_score}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="asset_name">
+          <th mat-header-cell *matHeaderCellDef> Asset Name </th>
+          <td mat-cell *matCellDef="let element; let i = index">
+            <a mat-flat-button href="/asset-view/{{ element.asset_id }}"> {{element.asset_name}}</a>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="asset_type">
+          <th mat-header-cell *matHeaderCellDef> Asset Type </th>
+          <td mat-cell *matCellDef="let element">{{element.asset_type}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="no_of_sensors">
+          <th mat-header-cell *matHeaderCellDef> No. of Sensors </th>
+          <td mat-cell *matCellDef="let element"> {{element.no_of_sensors}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="asset_class_type">
+          <th mat-header-cell *matHeaderCellDef class="rating-column">Asset Class Type</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.asset_class_type}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="flag">
+          <th mat-header-cell *matHeaderCellDef> Flag </th>
+          <td mat-cell *matCellDef="let element"> {{element.flag}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <mat-paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
+    </div>
+
+
+  </div>
+</div>
+
+<br />
+<mat-divider></mat-divider>
+<br />

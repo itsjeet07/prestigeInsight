@@ -1,0 +1,64 @@
+.stacked-bar-graph {
+  width: 90%;
+  margin: auto;
+  height: 25px;
+  // background: #eee;
+  color: #414042;
+
+  span {
+    display: inline-block;
+    height: 100%;
+    box-sizing: border-box;
+    float: left;
+    //  color: #fff;
+    font-weight: bold;
+    font-family: arial, sans-serif;
+    padding: 5px 5px;
+    &:hover,
+    &:active,
+    &:focus {
+      outline: 1px solid rgb(32, 31, 31);
+    }
+  }
+
+  .bar-1 {
+    background: #5470c6; // #3cd500;
+  }
+
+  .bar-2 {
+    background: #91cc75; // #7CFFB2;
+  }
+
+  .bar-3 {
+    background: #fac858;
+  }
+  .bar-4 {
+    background: #ee6666;
+  }
+
+  .tooltip {
+    position: relative;
+    display: inline;
+    // border-bottom: 1px dotted black;
+  }
+
+  .tooltip .tooltiptext {
+    outline: none !important;
+    visibility: hidden;
+    width: 50px;
+    // background-color: grey;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    border: 1px solid black;
+
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+  }
+
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+  }
+}
