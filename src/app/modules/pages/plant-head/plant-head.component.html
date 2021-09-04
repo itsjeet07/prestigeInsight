@@ -18,7 +18,7 @@
       <div fxFlex="40">
         <app-widget-guage [score]="plantScore"></app-widget-guage>
       </div>
-      <div fxFlex="60" style="margin-left: -10%;">
+      <div fxFlex="100" style="margin-left: -15%;">
         <app-widget-pie [data]="pieChartData"></app-widget-pie>
       </div>
     </mat-card>
@@ -34,23 +34,17 @@
             <td mat-cell *matCellDef="let element"> {{element.health_score}} </td>
           </ng-container>
 
-          <!-- Name Column -->
           <ng-container matColumnDef="area_name">
             <th mat-header-cell *matHeaderCellDef> Area Name <i style="padding-left: 2px; cursor: pointer;"
                 class="fa fa-sort sort-icon" (click)="sortHandler('area_name', 'area')"></i></th>
             <td mat-cell *matCellDef="let element;">
 
-
-
-              <a id="area-{{element.area_id}}" mat-flat-button class="table-cell" (click)="getEquipmentData(element)">
-                {{element.area_name}}</a>
-
-
+              <button id="area-{{element.area_id}}" class="button table-cell" (click)="getEquipmentData(element)">
+                {{element.area_name}}</button>
 
             </td>
           </ng-container>
 
-          <!-- Distribution Column -->
           <ng-container matColumnDef="rating_breakup">
             <th mat-header-cell *matHeaderCellDef class="rating-column"> Area Asset Rating Breakup </th>
             <td mat-cell *matCellDef="let element">
@@ -60,7 +54,6 @@
             </td>
           </ng-container>
 
-          <!-- Total Assets Column -->
           <ng-container matColumnDef="no_assets">
             <th mat-header-cell *matHeaderCellDef> Total Assets Being Monitored <i
                 style="padding-left: 2px; cursor: pointer;" class="fa fa-sort sort-icon"
@@ -73,39 +66,12 @@
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
 
-        <!-- <mat-paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator> -->
       </div>
     </mat-card>
   </mat-card>
 </div>
 <br />
 <mat-divider></mat-divider>
-<!-- 
-<section class="headerSection">
-    <div class="example-label">Assets</div>
-    <div class="example-button-row">
-        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-            {{activeChart}} <mat-icon>arrow_drop_down</mat-icon>
-          </button>
-          <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="drawTimelineChart('quater')">
-              <span>Quaterly</span>
-            </button>
-            <button mat-menu-item (click)="drawTimelineChart('month')">
-              <span>Monthly</span>
-            </button>
-            <button mat-menu-item  (click)="drawTimelineChart('week')">
-              <span>Weekly</span>
-            </button>
-          </mat-menu>
-    </div>
-</section>
-  
-<div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px" class="stats-cards">
-    <mat-card fxFlex="100">
-        <app-widget-bar [data]="barChartData"></app-widget-bar>
-    </mat-card>
-</div> -->
 
 <div class="setFocus">
   <section class="headerSection">
@@ -116,7 +82,7 @@
   </section>
   <div fxLayout="row" fxLayoutAlign="space between center" fxLayoutGap="20px">
     <div fxFlex="100" class="table-container">
-      <!-- <div> -->
+
       <table mat-table [dataSource]="dataSourceEq">
 
         <ng-container matColumnDef="equipment_id">
@@ -126,85 +92,28 @@
           <td mat-cell *matCellDef="let element"> {{element.equipment_id}} </td>
         </ng-container>
 
-
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef> Equipment Name <i style="padding-left: 2px; cursor: pointer;"
               class="fa fa-sort sort-icon" (click)="sortHandler('name','equipment')"></i></th>
           <td mat-cell *matCellDef="let element; let i = index">
-            <a id="eqp-{{element.equipment_id}}" mat-flat-button class="table-cell"
-              href="/area-view/{{element.equipment_id}}" (click)="setEqpBtn(element)">
+            <a id="eqp-{{element.equipment_id}}" class="button table-cell" href="/area-view/{{element.equipment_id}}"
+              (click)="setEqpBtn(element)">
               {{element.name}}</a>
-
-            <!-- <a mat-flat-button (click)="getEquipmentData(element)"> {{element.name}}</a> -->
           </td>
         </ng-container>
-
 
         <ng-container matColumnDef="description">
           <th mat-header-cell *matHeaderCellDef> Description </th>
           <td mat-cell *matCellDef="let element">{{element.description}}</td>
         </ng-container>
 
-
-
         <tr mat-header-row *matHeaderRowDef="displayedColumnsEq"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumnsEq;"></tr>
       </table>
 
-      <!-- <mat-paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator> -->
-      <!-- </div> -->
-
-
     </div>
   </div>
 </div>
-
-
-<!-- 
-<section class="headerSection">
-  <div class="example-label">Area Score</div>
-  <div class="example-button-row">
-  </div>
-</section>
-<div fxLayout="row" fxLayoutAlign="space between center" fxLayoutGap="20px">
-  <div fxFlex="100">
-    <div>
-      <table mat-table [dataSource]="dataSource">
-
-        <ng-container matColumnDef="health_score">
-          <th mat-header-cell *matHeaderCellDef> Health Score </th>
-          <td mat-cell *matCellDef="let element"> {{element.health_score}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="area_name">
-          <th mat-header-cell *matHeaderCellDef> Area Name </th>
-          <td mat-cell *matCellDef="let element">
-            <a mat-flat-button href="/area-view/{{element.area_id}}"> {{element.area_name}}</a>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="rating_breakup">
-          <th mat-header-cell *matHeaderCellDef class="rating-column"> Area Asset Rating Breakup </th>
-          <td mat-cell *matCellDef="let element">
-            <app-widget-stacked-bar [data]="formatStackData(element.rating_breakup)"
-              [total_count]="element.total_assets"></app-widget-stacked-bar>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="no_assets">
-          <th mat-header-cell *matHeaderCellDef> Total Assets Being Monitored </th>
-          <td mat-cell *matCellDef="let element"> {{element.no_assets}} </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-
-    </div>
-
-
-  </div>
-</div> -->
 
 <br />
 <mat-divider></mat-divider>
