@@ -1,4 +1,5 @@
-import { Component, OnInit, Output, EventEmitter} from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from '../../../_services/auth/auth.service';
 
 @Component({
@@ -9,20 +10,23 @@ import { AuthService } from '../../../_services/auth/auth.service';
 export class HeaderComponent implements OnInit {
 
   @Output() toggleSidebarForMe: EventEmitter<any> = new EventEmitter();
-  constructor(private _authService: AuthService) { }
-
+  constructor(private _authService: AuthService, private router: Router) { }
+  showNav = false;
   ngOnInit() {
+    if (this.router.url.includes('asset-view')) {
+      this.showNav = true;
+    }
   }
-  toggleSidebar(){
+  toggleSidebar() {
     this.toggleSidebarForMe.emit();
     setTimeout(() => {
       window.dispatchEvent(
         new Event('resize')
       );
-    },300);
+    }, 300);
   }
 
-  logout(){
+  logout() {
     this._authService.logout();
   }
 

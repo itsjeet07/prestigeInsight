@@ -8,23 +8,26 @@ import { Router } from '@angular/router';
 })
 export class DefaultComponent implements OnInit {
 
-  sidebarOpen = true;
+  sidebarOpen = false;
   showVibrationMenu = true;
   constructor(private router: Router) { }
 
   ngOnInit() {
+    if (this.router.url.includes('asset-view')) {
+      this.sidebarOpen = true;
+    }
   }
 
-  changeOfRoutes(){
-    if(this.router.url.includes('asset-view')){
+  changeOfRoutes() {
+    if (this.router.url.includes('asset-view')) {
       this.showVibrationMenu = true;
     }
-    else{
+    else {
       this.showVibrationMenu = false;
     }
   }
-  
-  sidebarToggler(event: any){
+
+  sidebarToggler(event: any) {
     this.sidebarOpen = !this.sidebarOpen;
   }
 

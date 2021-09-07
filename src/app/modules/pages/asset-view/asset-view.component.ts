@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/_services/pages/api.service';
 import { RouterModule, Routes, Router, ActivatedRoute } from '@angular/router';
-import {FormGroup, FormControl} from '@angular/forms';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import { FormGroup, FormControl } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface IdeviceRequest {
   device_id: string,
   timestamp?: string
 }
-interface IRMSRequest{
+interface IRMSRequest {
   device_id: string
   fromDate?: string
   toDate?: string
@@ -40,7 +40,7 @@ export class AssetViewComponent implements OnInit {
   chartColors = ['#5470c6', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'];
   currentId: number;
   devices = [];
-  axisList = ['x','y','z'];
+  axisList = ['x', 'y', 'z'];
   stFunctionList = {
     velocity_rms: "Velocity RMS",
     peak: "Peak",
@@ -78,37 +78,37 @@ export class AssetViewComponent implements OnInit {
   loadingVelocity: boolean = false;
   loadingDisplacement: boolean = false;
   loadingAcceleration: boolean = false;
-  RMSChartData:any; 
-  RMSData:any; 
+  RMSChartData: any;
+  RMSData: any;
 
   dateFormatter(timestamp) {
-    let m =  timestamp.getMonth() + 1;
-    let d =  timestamp.getDate();
-    return timestamp.getFullYear() + '-' + (m < 10?('0'+m):m ) + "-" +  (d < 10?('0'+d):d ) ;
+    let m = timestamp.getMonth() + 1;
+    let d = timestamp.getDate();
+    return timestamp.getFullYear() + '-' + (m < 10 ? ('0' + m) : m) + "-" + (d < 10 ? ('0' + d) : d);
   }
 
-  constructor(private apiService: ApiService, private route: ActivatedRoute,  private _snackBar: MatSnackBar) {
+  constructor(private apiService: ApiService, private route: ActivatedRoute, private _snackBar: MatSnackBar) {
     this.route.params.subscribe(params => {
-			this.currentId = params['id'];
-			if (this.currentId && this.currentId != null && this.currentId !== undefined) {
-				// this.getVelocityRMS(this.currentId);
+      this.currentId = params['id'];
+      if (this.currentId && this.currentId != null && this.currentId !== undefined) {
+        // this.getVelocityRMS(this.currentId);
         // this.getAcceleration(this.currentId);
         // this.getVelocity(this.currentId);
         // this.getDisplacement(this.currentId);
         this.getAssetData(this.currentId);
-			}
-		});
+      }
+    });
   }
 
   ngOnInit() {
     //this.getVelocity();
   }
 
-  getAssetData(id){
+  getAssetData(id) {
     this.apiService.getAssetDeviceData(id).subscribe(
       (res) => {
         console.log('getAssetData', res)
-        if(res && res.device_list && res.device_list.length > 0){
+        if (res && res.device_list && res.device_list.length > 0) {
           this.timestampList = res.timestamp_list;
           this.devices = res.device_list;
           this.selectedObj.device = res.device_id;
@@ -134,22 +134,22 @@ export class AssetViewComponent implements OnInit {
     )
   }
 
-  rangeFilter(val){
+  rangeFilter(val) {
     let dataObj: IRMSRequest = {
       device_id: this.selectedObj.device
     }
-    if(val){
+    if (val) {
       dataObj.fromDate = this.dateFormatter(this.range.value.start);
       dataObj.toDate = this.dateFormatter(this.range.value.end)
     }
     this.apiService.getRMSRangeData(dataObj).subscribe(
       (res) => {
         console.log('getRMSRangeData', res)
-        if(res && res.data){
+        if (res && res.data) {
           this.RMSData = res.data;
           this.drawRMSChart();
         }
-        if(res && res.velocity_rms){
+        if (res && res.velocity_rms) {
           this.RMSData = res.velocity_rms;
           this.drawRMSChart();
         }
@@ -159,16 +159,16 @@ export class AssetViewComponent implements OnInit {
         this._snackBar.open(error.error.Message, 'Close', {
           horizontalPosition: 'end',
           verticalPosition: 'bottom',
-          });
+        });
       }
     )
   }
-  getAccelerationData(timestamp = null){
+  getAccelerationData(timestamp = null) {
     this.loadingAcceleration = true;
     let data: IdeviceRequest = {
       device_id: this.selectedObj.device
     }
-    if(timestamp){
+    if (timestamp) {
       data.timestamp = timestamp;
     }
     this.apiService.getAccelerationAmplitude(data, this.chart2Selection.domain).subscribe(
@@ -182,12 +182,12 @@ export class AssetViewComponent implements OnInit {
       }
     )
   }
-  getVelocityData(timestamp = null){
+  getVelocityData(timestamp = null) {
     this.loadingVelocity = true
     let data: IdeviceRequest = {
       device_id: this.selectedObj.device
     }
-    if(timestamp){
+    if (timestamp) {
       data.timestamp = timestamp;
     }
     this.apiService.getVelocityAmplitude(data, this.chart3Selection.domain).subscribe(
@@ -201,12 +201,12 @@ export class AssetViewComponent implements OnInit {
       }
     )
   }
-  getDisplacementData(timestamp = null){
+  getDisplacementData(timestamp = null) {
     this.loadingDisplacement = true;
     let data: IdeviceRequest = {
       device_id: this.selectedObj.device
     }
-    if(timestamp){
+    if (timestamp) {
       data.timestamp = timestamp;
     }
     this.apiService.getDisplacementAmplitude(data, this.chart4Selection.domain).subscribe(
@@ -221,7 +221,7 @@ export class AssetViewComponent implements OnInit {
     )
   }
 
-  formatRMSData(data){
+  formatRMSData(data) {
     this.RMSData = data;
   }
   /*
@@ -241,11 +241,11 @@ export class AssetViewComponent implements OnInit {
     )
   }
   */
-  getAcceleration(id){
+  getAcceleration(id) {
     this.apiService.getAcceleration(id).subscribe(
       (res) => {
         console.log('getAcceleration', res)
-        if(res && res.length > 0){
+        if (res && res.length > 0) {
           this.formatAccelerationData(res);
         }
       },
@@ -254,10 +254,10 @@ export class AssetViewComponent implements OnInit {
       }
     )
   }
-  getVelocity(id){
+  getVelocity(id) {
     this.apiService.getVelocity(id).subscribe(
       (res) => {
-        if(res && res.length > 0){
+        if (res && res.length > 0) {
           this.formatVelocityData(res);
         }
       },
@@ -266,10 +266,10 @@ export class AssetViewComponent implements OnInit {
       }
     )
   }
-  getDisplacement(id){
+  getDisplacement(id) {
     this.apiService.getDisplacement(id).subscribe(
       (res) => {
-        if(res && res.length > 0){
+        if (res && res.length > 0) {
           this.formatDisplacementData(res);
         }
       },
@@ -279,16 +279,16 @@ export class AssetViewComponent implements OnInit {
     )
   }
 
-  
-  getHarmonicsData(fnType){
+
+  getHarmonicsData(fnType) {
     console.log('getHarmonicsData', fnType)
     let waveType = this.chart4Selection.domain;
     let timeStamp = this.displacementData.timestamp;
-    if(fnType === 'acceleration'){
+    if (fnType === 'acceleration') {
       waveType = this.chart2Selection.domain
       timeStamp = this.accelerationData.timestamp
     }
-    if(fnType === 'velocity'){
+    if (fnType === 'velocity') {
       waveType = this.chart3Selection.domain
       timeStamp = this.velocityData.timestamp
     }
@@ -301,16 +301,16 @@ export class AssetViewComponent implements OnInit {
     }
     this.apiService.getHarmonicsData(reqObj).subscribe(
       (res) => {
-        if(res){
-          if(fnType === 'acceleration'){
+        if (res) {
+          if (fnType === 'acceleration') {
             this.accelerationData.harmonics = res.data;
             this.drawAccelerationChart(true)
           }
-          else if(fnType === 'velocity'){
+          else if (fnType === 'velocity') {
             this.velocityData.harmonics = res.data;
             this.drawVelocityChart(true)
           }
-          else{
+          else {
             this.displacementData.harmonics = res.data;
             this.drawDisplacementChart(true)
           }
@@ -323,51 +323,51 @@ export class AssetViewComponent implements OnInit {
     )
   }
 
-  formatResponse(res){
+  formatResponse(res) {
     let deviceList = [];
     let deviceData = {};
-    res.map( function(val, ind){
-      deviceList.push( ...(Object.keys(val)));
-      deviceData = {...deviceData, ...val};
+    res.map(function (val, ind) {
+      deviceList.push(...(Object.keys(val)));
+      deviceData = { ...deviceData, ...val };
     })
     this.devices = deviceList;
     this.selectedObj.device = deviceList[0];
     this.deviceData = deviceData;
     console.log(this.deviceData);
   }
-  formatAccelerationData(res){
+  formatAccelerationData(res) {
     let data = {};
     let deviceList = [];
-    res.map( function(val, ind){
-      deviceList.push( ...(Object.keys(val)));
-      data = {...data, ...val};
+    res.map(function (val, ind) {
+      deviceList.push(...(Object.keys(val)));
+      data = { ...data, ...val };
     })
     this.accelerationData = data;
     this.drawAccelerationChart();
   }
-  formatVelocityData(res){
+  formatVelocityData(res) {
     let data = {};
     let deviceList = [];
-    res.map( function(val, ind){
-      deviceList.push( ...(Object.keys(val)));
-      data = {...data, ...val};
+    res.map(function (val, ind) {
+      deviceList.push(...(Object.keys(val)));
+      data = { ...data, ...val };
     })
-    this.velocityData = data; 
+    this.velocityData = data;
     this.drawVelocityChart();
   }
-  formatDisplacementData(res){
+  formatDisplacementData(res) {
     let data = {};
     let deviceList = [];
-    res.map( function(val, ind){
-      deviceList.push( ...(Object.keys(val)));
-      data = {...data, ...val};
+    res.map(function (val, ind) {
+      deviceList.push(...(Object.keys(val)));
+      data = { ...data, ...val };
     })
-    this.displacementData = data; 
+    this.displacementData = data;
     this.drawDisplacementChart();
   }
-  changeDevice(deviceId){
+  changeDevice(deviceId) {
     this.selectedObj.device = deviceId;
-    
+
     this.getAccelerationData();
     this.getVelocityData();
     this.getDisplacementData();
@@ -377,36 +377,36 @@ export class AssetViewComponent implements OnInit {
     // this.drawDisplacementChart();
     // this.drawVelocityChart();
   }
-  changeAxis(axis){
+  changeAxis(axis) {
     this.selectedObj.axis = axis;
     this.drawAccelerationChart();
     this.drawDisplacementChart();
     this.drawVelocityChart();
     this.drawRMSChart();
   }
-  changeStFunction(fn_name){
+  changeStFunction(fn_name) {
     this.chart1Selection.stFunction = fn_name;
     this.drawRMSChart();
   }
-  changeAccDomain(fn_name){
+  changeAccDomain(fn_name) {
     this.chart2Selection.domain = fn_name;
     this.getAccelerationData(this.accelerationData.timestamp);
   }
-  changeVelDomain(fn_name){
+  changeVelDomain(fn_name) {
     this.chart3Selection.domain = fn_name;
     this.getVelocityData(this.velocityData.timestamp);
   }
-  changeDisDomain(fn_name){
+  changeDisDomain(fn_name) {
     this.chart4Selection.domain = fn_name;
     this.getDisplacementData(this.displacementData.timestamp);
   }
-  changeAccTime(timestamp){
+  changeAccTime(timestamp) {
     this.getAccelerationData(timestamp);
   }
-  changeVelTime(timestamp){
+  changeVelTime(timestamp) {
     this.getVelocityData(timestamp);
   }
-  changeDisTime(timestamp){
+  changeDisTime(timestamp) {
     this.getDisplacementData(timestamp);
   }
 
@@ -469,11 +469,11 @@ export class AssetViewComponent implements OnInit {
   //   }
   // }
 
-  
+
   unixDateFormatter(unix_timestamp) {
     return new Date(unix_timestamp * 1000).toISOString().slice(0, 19).replace('T', ' ')
   }
-  drawRMSChart(){
+  drawRMSChart() {
     let selectedAxis = this.selectedObj.axis;
     let selectedRMSFn = this.chart1Selection.stFunction;
     let chartData = [];
@@ -481,7 +481,7 @@ export class AssetViewComponent implements OnInit {
     //   let v = this.RMSData[i];
     //   chartData.push([this.unixDateFormatter(v.timestamp), parseFloat(v[selectedAxis][selectedRMSFn])]); 
     // }
-    this.RMSData.map(function(v,i){
+    this.RMSData.map(function (v, i) {
       chartData.push([v.timestamp, parseFloat(v[selectedAxis][selectedRMSFn])]);
     })
     this.RMSChartData = {
@@ -490,109 +490,109 @@ export class AssetViewComponent implements OnInit {
     }
     console.log('RMSChartData', chartData)
   }
-  drawAccelerationChart( harmonics = false){
+  drawAccelerationChart(harmonics = false) {
     let selectedAxis = this.selectedObj.axis;
     let dataZoomEndValue = null;
     let chartData: any = [
       {
-        "name": 'Acceleration ' + (this.chart2Selection.domain === 'frequency'?'Frequency': 'Time'),
+        "name": 'Acceleration ' + (this.chart2Selection.domain === 'frequency' ? 'Frequency' : 'Time'),
         "type": "line",
         "barGap": 0,
         "emphasis": {
           "focus": "series"
         },
         "data": [],
-        "selectedMode":"multiple"
+        "selectedMode": "multiple"
       }
     ];
     let data = this.accelerationData[selectedAxis];
     chartData[0].data = data;
-    let time_stamps = this.accelerationData.samples_time?this.accelerationData.samples_time: this.apiData.samples_time;
-    if(harmonics){
+    let time_stamps = this.accelerationData.samples_time ? this.accelerationData.samples_time : this.apiData.samples_time;
+    if (harmonics) {
       let hmData = [];
       let freq = ['71.11111111111111',
-      '142.22222222222223',
-      '213.33333333333334',
-      '284.44444444444446',
-      '355.55555555555554',
-      '426.6666666666667',
-      '497.77777777777777',
-      '568.8888888888889',
-      '640.0',
-      '711.1111111111111',
-      '782.2222222222223',
-      '853.3333333333334',
-      '924.4444444444445',
-      '995.5555555555555',
-      '1066.6666666666667',
-      '1137.7777777777778'];
+        '142.22222222222223',
+        '213.33333333333334',
+        '284.44444444444446',
+        '355.55555555555554',
+        '426.6666666666667',
+        '497.77777777777777',
+        '568.8888888888889',
+        '640.0',
+        '711.1111111111111',
+        '782.2222222222223',
+        '853.3333333333334',
+        '924.4444444444445',
+        '995.5555555555555',
+        '1066.6666666666667',
+        '1137.7777777777778'];
       let amp = ['0.0',
-      '0.0',
-      '0.0',
-      '0.0',
-      '0.0',
-      '0.0',
-      '0.0',
-      '0.0',
-      '0.0',
-      '0.0',
-      '0.0',
-      '0.0',
-      '0.0007943680281447879',
-      '0.0',
-      '0.0',
-      '0.0']
+        '0.0',
+        '0.0',
+        '0.0',
+        '0.0',
+        '0.0',
+        '0.0',
+        '0.0',
+        '0.0',
+        '0.0',
+        '0.0',
+        '0.0',
+        '0.0007943680281447879',
+        '0.0',
+        '0.0',
+        '0.0']
       // this.accelerationData.harmonics.amp.map((v, i) =>{
       //   hmData[time_stamps.indexOf(v)] = this.accelerationData.harmonics.freq[i];
       //   chartData[0].markLine.data.push({
       //     x: parseFloat(this.accelerationData.harmonics.freq[i])
       //   })
-        // chartData[0].markLine.data.push({
-        //   name: 'Markline between two points',
-        //   coord: [this.accelerationData.harmonics.freq[i], v]
-        // })
+      // chartData[0].markLine.data.push({
+      //   name: 'Markline between two points',
+      //   coord: [this.accelerationData.harmonics.freq[i], v]
+      // })
       //})
-      freq.map((v, i) =>{
-         hmData[time_stamps.indexOf(v)] = amp[i];
+      freq.map((v, i) => {
+        hmData[time_stamps.indexOf(v)] = amp[i];
       });
       let harmonics = {
         name: "Harmonics",
         type: "bar",
         barWidth: 10,
-        barMinHeight:10,
+        barMinHeight: 10,
         barGap: 0,
-        tooltip:{
+        tooltip: {
           trigger: 'item'
         },
         emphasis: {
           focus: "series"
         },
         data: hmData, //this.accelerationData.harmonics.freq,
-        selectedMode:"multiple"  
+        selectedMode: "multiple"
       }
       chartData.push(harmonics)
-      dataZoomEndValue = freq[freq.length-1];
+      dataZoomEndValue = freq[freq.length - 1];
     }
     this.accelerationChartData = {
-      chartData : chartData,
-      timeline : time_stamps,
+      chartData: chartData,
+      timeline: time_stamps,
       legend: selectedAxis,
       title: chartData[0].name + ' - Device - ' + this.selectedObj.device + ' ' + selectedAxis + ' Axis',
       dataZoomStart: 0.001,
-      xtitle: this.chart2Selection.domain === 'frequency'? 'Frequency (HZ)':'Time (Sec)',
-      ytitle:'Acceleration (g)',
+      xtitle: this.chart2Selection.domain === 'frequency' ? 'Frequency (HZ)' : 'Time (Sec)',
+      ytitle: 'Acceleration (g)',
       showDeltaT: this.chart2Selection.domain === CHART_FN.TIME,
       dataZoomEndValue: dataZoomEndValue,
       colors: this.chartColors
     }
     this.loadingAcceleration = false;
   }
-  drawVelocityChart( harmonics = false){
+  drawVelocityChart(harmonics = false) {
     let selectedAxis = this.selectedObj.axis;
     let dataZoomEndValue = null;
     let chartData = [
       {
-        "name": 'Velocity '+ (this.chart3Selection.domain === 'frequency'?'Frequency': 'Time'),
+        "name": 'Velocity ' + (this.chart3Selection.domain === 'frequency' ? 'Frequency' : 'Time'),
         "type": "line",
         "barGap": 0,
         "emphasis": {
@@ -603,95 +603,95 @@ export class AssetViewComponent implements OnInit {
     ];
     let data = this.velocityData[selectedAxis];
     chartData[0].data = data
-    let time_stamps = this.velocityData.samples_time?this.velocityData.samples_time: this.apiData.samples_time;
-    if(harmonics){
+    let time_stamps = this.velocityData.samples_time ? this.velocityData.samples_time : this.apiData.samples_time;
+    if (harmonics) {
       let hmData = [];
       let freq = ['71.11111111111111',
-      '142.22222222222223',
-      '213.33333333333334',
-      '284.44444444444446',
-      '355.55555555555554',
-      '426.6666666666667',
-      '497.77777777777777',
-      '568.8888888888889',
-      '640.0',
-      '711.1111111111111',
-      '782.2222222222223',
-      '853.3333333333334',
-      '924.4444444444445',
-      '995.5555555555555',
-      '1066.6666666666667',
-      '1137.7777777777778'];
+        '142.22222222222223',
+        '213.33333333333334',
+        '284.44444444444446',
+        '355.55555555555554',
+        '426.6666666666667',
+        '497.77777777777777',
+        '568.8888888888889',
+        '640.0',
+        '711.1111111111111',
+        '782.2222222222223',
+        '853.3333333333334',
+        '924.4444444444445',
+        '995.5555555555555',
+        '1066.6666666666667',
+        '1137.7777777777778'];
       let amp = ['0.0',
-      '0.0',
-      '0.0',
-      '0.0',
-      '0.0',
-      '0.0',
-      '0.0',
-      '0.0',
-      '0.0',
-      '0.0',
-      '0.0',
-      '0.0',
-      '0.0007943680281447879',
-      '0.0',
-      '0.0',
-      '0.0']
+        '0.0',
+        '0.0',
+        '0.0',
+        '0.0',
+        '0.0',
+        '0.0',
+        '0.0',
+        '0.0',
+        '0.0',
+        '0.0',
+        '0.0',
+        '0.0007943680281447879',
+        '0.0',
+        '0.0',
+        '0.0']
       // this.accelerationData.harmonics.amp.map((v, i) =>{
       //   hmData[time_stamps.indexOf(v)] = this.accelerationData.harmonics.freq[i];
       //   chartData[0].markLine.data.push({
       //     x: parseFloat(this.accelerationData.harmonics.freq[i])
       //   })
-        // chartData[0].markLine.data.push({
-        //   name: 'Markline between two points',
-        //   coord: [this.accelerationData.harmonics.freq[i], v]
-        // })
+      // chartData[0].markLine.data.push({
+      //   name: 'Markline between two points',
+      //   coord: [this.accelerationData.harmonics.freq[i], v]
+      // })
       //})
-      freq.map((v, i) =>{
-         hmData[time_stamps.indexOf(v)] = amp[i];
+      freq.map((v, i) => {
+        hmData[time_stamps.indexOf(v)] = amp[i];
       });
       let harmonics = {
         name: "Harmonics",
         type: "bar",
         barWidth: 10,
-        barMinHeight:10,
+        barMinHeight: 10,
         barGap: 0,
-        tooltip:{
+        tooltip: {
           trigger: 'item'
         },
         emphasis: {
           focus: "series"
         },
         data: hmData, //this.accelerationData.harmonics.freq,
-        selectedMode:"multiple"  
+        selectedMode: "multiple"
       }
       chartData.push(harmonics)
-      dataZoomEndValue = freq[freq.length-1];
+      dataZoomEndValue = freq[freq.length - 1];
     }
-    
-    
+
+
     this.velocityChartData = {
-      chartData : chartData,
-      timeline : time_stamps,
+      chartData: chartData,
+      timeline: time_stamps,
       legend: selectedAxis,
       title: chartData[0].name + ' - Device - ' + this.selectedObj.device + ' ' + selectedAxis + ' Axis',
       dataZoomStart: 0.001,
-      xtitle: this.chart3Selection.domain === 'frequency'? 'Frequency (HZ)':'Time (Sec)',
-      ytitle:'Velocity (mm/sec)',
+      xtitle: this.chart3Selection.domain === 'frequency' ? 'Frequency (HZ)' : 'Time (Sec)',
+      ytitle: 'Velocity (mm/sec)',
       showDeltaT: this.chart3Selection.domain === CHART_FN.TIME,
       dataZoomEndValue: dataZoomEndValue,
       colors: this.chartColors
     }
     this.loadingVelocity = false;
   }
-  
-  drawDisplacementChart( harmonics = false){
+
+  drawDisplacementChart(harmonics = false) {
     let selectedAxis = this.selectedObj.axis;
     let dataZoomEndValue = null;
     let chartData = [
       {
-        "name": 'Displacement '+ (this.chart4Selection.domain === 'frequency'?'Frequency': 'Time'),
+        "name": 'Displacement ' + (this.chart4Selection.domain === 'frequency' ? 'Frequency' : 'Time'),
         "type": "line",
         "barGap": 0,
         "emphasis": {
@@ -702,81 +702,81 @@ export class AssetViewComponent implements OnInit {
     ];
     let data = this.displacementData[selectedAxis];
     chartData[0].data = data;
-    let time_stamps = this.displacementData.samples_time?this.displacementData.samples_time: this.apiData.samples_time;
-    if(harmonics){
+    let time_stamps = this.displacementData.samples_time ? this.displacementData.samples_time : this.apiData.samples_time;
+    if (harmonics) {
       let hmData = [];
       let freq = ['71.11111111111111',
-      '142.22222222222223',
-      '213.33333333333334',
-      '284.44444444444446',
-      '355.55555555555554',
-      '426.6666666666667',
-      '497.77777777777777',
-      '568.8888888888889',
-      '640.0',
-      '711.1111111111111',
-      '782.2222222222223',
-      '853.3333333333334',
-      '924.4444444444445',
-      '995.5555555555555',
-      '1066.6666666666667',
-      '1137.7777777777778'];
+        '142.22222222222223',
+        '213.33333333333334',
+        '284.44444444444446',
+        '355.55555555555554',
+        '426.6666666666667',
+        '497.77777777777777',
+        '568.8888888888889',
+        '640.0',
+        '711.1111111111111',
+        '782.2222222222223',
+        '853.3333333333334',
+        '924.4444444444445',
+        '995.5555555555555',
+        '1066.6666666666667',
+        '1137.7777777777778'];
       let amp = ['0.0',
-      '0.0',
-      '0.0',
-      '0.0',
-      '0.0',
-      '0.0',
-      '0.0',
-      '0.0',
-      '0.0',
-      '0.0',
-      '0.0',
-      '0.0',
-      '0.0007943680281447879',
-      '0.0',
-      '0.0',
-      '0.0']
+        '0.0',
+        '0.0',
+        '0.0',
+        '0.0',
+        '0.0',
+        '0.0',
+        '0.0',
+        '0.0',
+        '0.0',
+        '0.0',
+        '0.0',
+        '0.0007943680281447879',
+        '0.0',
+        '0.0',
+        '0.0']
       // this.accelerationData.harmonics.amp.map((v, i) =>{
       //   hmData[time_stamps.indexOf(v)] = this.accelerationData.harmonics.freq[i];
       //   chartData[0].markLine.data.push({
       //     x: parseFloat(this.accelerationData.harmonics.freq[i])
       //   })
-        // chartData[0].markLine.data.push({
-        //   name: 'Markline between two points',
-        //   coord: [this.accelerationData.harmonics.freq[i], v]
-        // })
+      // chartData[0].markLine.data.push({
+      //   name: 'Markline between two points',
+      //   coord: [this.accelerationData.harmonics.freq[i], v]
+      // })
       //})
-      freq.map((v, i) =>{
-         hmData[time_stamps.indexOf(v)] = amp[i];
+      freq.map((v, i) => {
+        hmData[time_stamps.indexOf(v)] = amp[i];
       });
       let harmonics = {
         name: "Harmonics",
         type: "bar",
         barWidth: 10,
-        barMinHeight:10,
+        barMinHeight: 10,
         barGap: 0,
-        tooltip:{
+        tooltip: {
           trigger: 'item'
         },
         emphasis: {
           focus: "series"
         },
         data: hmData, //this.accelerationData.harmonics.freq,
-        selectedMode:"multiple"  
+        selectedMode: "multiple"
       }
       chartData.push(harmonics)
-      dataZoomEndValue = freq[freq.length-1];
+      dataZoomEndValue = freq[freq.length - 1];
     }
-    
+
     this.displacementChartData = {
-      chartData : chartData,
-      timeline : time_stamps,
+      chartData: chartData,
+      timeline: time_stamps,
       legend: selectedAxis,
       title: chartData[0].name + ' - Device - ' + this.selectedObj.device + ' ' + selectedAxis + ' Axis',
       dataZoomStart: 0.001,
-      xtitle: this.chart4Selection.domain === 'frequency'? 'Frequency (HZ)':'Time (Sec)',
-      ytitle:'Displacement (Micron)',
+      xtitle: this.chart4Selection.domain === 'frequency' ? 'Frequency (HZ)' : 'Time (Sec)',
+      ytitle: 'Displacement (Micron)',
       showDeltaT: this.chart4Selection.domain === CHART_FN.TIME,
       dataZoomEndValue: dataZoomEndValue,
       colors: this.chartColors
@@ -784,7 +784,7 @@ export class AssetViewComponent implements OnInit {
     this.loadingDisplacement = false
   }
 
-  drawChart(){
+  drawChart() {
     let chartData = [
       {
         "name": "x",
@@ -812,32 +812,32 @@ export class AssetViewComponent implements OnInit {
         "data": []
       }];
     let time_stamps = [];
-    this.chartData.map(function(v,i){
+    this.chartData.map(function (v, i) {
       time_stamps.push(v.time_stamp);
-      v.velocity.map(function(val,ind){
-        if(val.key === 'x'){
+      v.velocity.map(function (val, ind) {
+        if (val.key === 'x') {
           chartData[0].data[i] = val.value;
         }
-        if(val.key === "y"){
+        if (val.key === "y") {
           chartData[1].data[i] = val.value;
         }
-        if(val.key === 'z'){
+        if (val.key === 'z') {
           chartData[2].data[i] = val.value;
         }
       });
     })
     this.lineChartData = {
-      chartData : chartData,
-      timeline : time_stamps,
-      legend: ['x','y','z'],
+      chartData: chartData,
+      timeline: time_stamps,
+      legend: ['x', 'y', 'z'],
       title: 'Asset Health Trend'
     }
     console.log(this.lineChartData);
 
   }
 
-  drawTimelineChart(timeline: string){
-    console.log('timeline',timeline)
+  drawTimelineChart(timeline: string) {
+    console.log('timeline', timeline)
   }
 
 }
