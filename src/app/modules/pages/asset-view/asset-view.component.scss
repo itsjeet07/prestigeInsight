@@ -1,9 +1,9 @@
-section.headerSection{
-    display: table;
-    background: #fff;
-    padding-left: 30px;    
-    border: 1px solid #eee;
-    width: -webkit-fill-available;
+section.headerSection {
+  display: table;
+  background: #fff;
+  padding-left: 30px;
+  border: 1px solid #eee;
+  width: -webkit-fill-available;
 
   .example-label {
     display: table-cell;
@@ -11,24 +11,32 @@ section.headerSection{
     min-width: 120px;
     line-height: 40px;
   }
-  
+
   .example-button-row {
     display: table-cell;
     width: 100%;
   }
-  
 }
 table {
-    width: 100%;
+  width: 100%;
 }
-.loadingText{
+.loadingText {
   display: block;
   text-align: center;
   padding: 200px;
 }
-.example-button-row{
+.example-button-row {
   display: table-cell;
 }
-mat-form-field{
+mat-form-field {
   height: 40px;
+}
+
+.imgBox {
+  border-radius: 50%;
+  min-height: 125;
+  width: auto;
+  max-width: 125;
+  height: auto;
+  margin: auto;
 }

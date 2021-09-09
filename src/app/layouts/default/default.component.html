@@ -1,9 +1,9 @@
 <app-header (toggleSidebarForMe)="sidebarToggler($event)"></app-header>
 
 <mat-drawer-container>
-    <mat-drawer mode="side" [opened]="sidebarOpen">
+    <!-- <mat-drawer mode="side" [opened]="sidebarOpen">
         <app-sidebar [showVibrationMenu]="showVibrationMenu"></app-sidebar>
-    </mat-drawer>
+    </mat-drawer> -->
     <mat-drawer-content>
         <router-outlet (activate)="changeOfRoutes()"></router-outlet>
     </mat-drawer-content>

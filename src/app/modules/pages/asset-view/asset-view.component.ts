@@ -81,6 +81,10 @@ export class AssetViewComponent implements OnInit {
   RMSChartData: any;
   RMSData: any;
 
+
+  domain = 'amplitude';
+  tabType = 'Acceleration';
+
   dateFormatter(timestamp) {
     let m = timestamp.getMonth() + 1;
     let d = timestamp.getDate();
@@ -171,7 +175,7 @@ export class AssetViewComponent implements OnInit {
     if (timestamp) {
       data.timestamp = timestamp;
     }
-    this.apiService.getAccelerationAmplitude(data, this.chart2Selection.domain).subscribe(
+    this.apiService.getAccelerationAmplitude(data, this.domain).subscribe(
       (res) => {
         console.log('getAccelerationAmplitude', res)
         this.accelerationData = res;
@@ -186,13 +190,12 @@ export class AssetViewComponent implements OnInit {
     this.loadingVelocity = true
     let data: IdeviceRequest = {
       device_id: this.selectedObj.device
-    }
+    };
     if (timestamp) {
       data.timestamp = timestamp;
     }
-    this.apiService.getVelocityAmplitude(data, this.chart3Selection.domain).subscribe(
+    this.apiService.getVelocityAmplitude(data, this.domain).subscribe(
       (res) => {
-        console.log('getVelocityAmplitude', res)
         this.velocityData = res;
         this.drawVelocityChart();
       },
@@ -367,7 +370,6 @@ export class AssetViewComponent implements OnInit {
   }
   changeDevice(deviceId) {
     this.selectedObj.device = deviceId;
-
     this.getAccelerationData();
     this.getVelocityData();
     this.getDisplacementData();
@@ -410,6 +412,38 @@ export class AssetViewComponent implements OnInit {
     this.getDisplacementData(timestamp);
   }
 
+  changeDomain(domain) {
+    this.domain = domain;
+    this.chart2Selection.domain = domain;
+    if (this.tabType == 'Acceleration') {
+      this.changeAccDomain(domain);
+    };
+    if (this.tabType == 'Velocity') {
+      this.changeVelDomain(domain);
+    };
+    if (this.tabType == 'Displacement') {
+      this.changeDisDomain(domain);
+    };
+  };
+
+  changeTabType(e) {
+    this.tabType = e.tab.textLabel;
+    if (this.tabType == 'Acceleration') {
+      if (this.domain == 'frequency') {
+        this.changeAccDomain('frequency');
+      }
+    };
+    if (this.tabType == 'Velocity') {
+      if (this.domain == 'frequency') {
+        this.changeVelDomain('frequency');
+      }
+    };
+    if (this.tabType == 'Displacement') {
+      if (this.domain == 'frequency') {
+        this.changeDisDomain('frequency');
+      }
+    }
+  };
   // drawRMSChart(){
   //   let selectedAxis = this.selectedObj.axis;
   //   let selectedFn = this.chart1Selection.stFunction;

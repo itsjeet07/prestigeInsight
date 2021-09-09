@@ -9,139 +9,151 @@ import { EChartsOption } from 'echarts';
 export class LineChartComponent implements OnInit, OnChanges {
   chartOptions: EChartsOption
   @Input() data: any;
-  showDeltaT : boolean = false;
-  t1: any = '';
-  t2: any = '';
+  showDeltaT: boolean = false;
+  t1: any = 0;
+  t2: any = 0;
   t1Selected: boolean = false;
   t2Selected: boolean = false;
   deltaTSelected: boolean = false;
   deltaT: number = 0;
   highlightData: any = {
-    type :'highlight'
+    type: 'highlight'
   };
-  echartsInstance : any;
-  
-  onChartInit(ec) {
+  echartsInstance: any;
+
+  onChartInit(ec: any) {
     this.echartsInstance = ec;
   }
 
   constructor() { }
 
-  ngOnInit() {  }
+  ngOnInit() { }
 
-  ngOnChanges(){
-    if(this.data){
+  ngOnChanges() {
+    if (this.data) {
       this.showDeltaT = this.data.showDeltaT || false;
       this.chartOptions = {
-          title: {
-              text: this.data.title
+        title: {
+          text: this.data.title
+        },
+        tooltip: {
+          trigger: 'axis'
+        },
+        legend: {
+          data: this.data.legend
+        },
+        grid: {
+          left: '5%',
+          right: '4%',
+          bottom: '18%',
+          containLabel: true
+        },
+        textStyle: {
+          fontSize: 6
+        },
+        toolbox: {
+          feature: {
+            dataZoom: {},
+            saveAsImage: {},
+          }
+        },
+        select: {
+          label: {
+            show: true
+          }
+        },
+        selectMode: true,
+        xAxis: {
+          name: this.data.xtitle || '',
+          nameLocation: 'middle',
+          nameGap: 22,
+          nameTextStyle: {
+            fontSize: 12,
           },
-          tooltip: {
-              trigger: 'axis'
-          },
-          legend: {
-              data: this.data.legend
-          },
-          grid: {
-              left: '5%',
-              right: '4%',
-              bottom: '18%',
-              containLabel: true
-          },
-          textStyle: {
-            fontSize: 6
-          },
-          toolbox: {
-              feature: {
-                dataZoom:{},
-                saveAsImage: {},
-              }
-          },
-          select:{
-            label: {
-              show: true,
-            }
-          },
-          selectMode:true,
-          xAxis: {
-              name:this.data.xtitle || '',
-              nameLocation: 'middle',
-              nameGap:22,
-              nameTextStyle: {
-                fontSize:12,
-              },
-              type: 'category',
-              boundaryGap: false,
-              data: this.data.timeline,
-              axisLabel: {
-                  formatter: (value, index) => {
-                      return parseFloat(value).toFixed(3);
-                  },
-              }
-          },
-          yAxis: {
-            name:this.data.ytitle || '',
-            nameLocation: 'middle',
-            nameGap:30,
-            nameTextStyle: {
-              fontSize:12,
+          type: 'category',
+          boundaryGap: false,
+          data: this.data.timeline,
+          axisLabel: {
+            formatter: (value, index) => {
+              return parseFloat(value).toFixed(3);
             },
-              type: 'value',
-              max: function (value) {
-                  return (value.max + (value.max * 20/100)).toFixed(2);
-              }
+          }
+        },
+        yAxis: {
+          name: this.data.ytitle || '',
+          nameLocation: 'middle',
+          nameGap: 30,
+          nameTextStyle: {
+            fontSize: 12,
           },
-          dataZoom: [
-            {
-              type: "slider",
-              show: true,
-              start: this.data.dataZoomStart || 60
-            },
-            {
-              type: "inside",
-              show: true,
-              start: this.data.dataZoomStart || 60
-            }
-          ],
-          series: this.data.chartData
+          type: 'value',
+          max: function (value) {
+            return (value.max + (value.max * 20 / 100)).toFixed(2);
+          }
+        },
+        dataZoom: [
+          {
+            type: "slider",
+            show: true,
+            start: this.data.dataZoomStart || 60
+          },
+          {
+            type: "inside",
+            show: true,
+            start: this.data.dataZoomStart || 60
+          }
+        ],
+        series: this.data.chartData
       }
-      if(this.data.dataZoomEndValue){
+      if (this.data.dataZoomEndValue) {
         this.chartOptions.dataZoom[0].endValue = this.data.dataZoomEndValue
         this.chartOptions.dataZoom[1].endValue = this.data.dataZoomEndValue
       }
-      if(this.data.colors){
+      if (this.data.colors) {
         this.chartOptions.color = this.data.colors;
       }
     }
 
   }
-  onChartClick(ev){
-    if(!this.t1Selected){
-      this.t1 = ev.value;
-      this.t2 = null;
+
+  onChartClick(ev) {
+    console.log('zzzzzzzzzzzxxxxxxxxxxx', this.echartsInstance._api.dispatchAction)
+
+    this.echartsInstance._api.dispatchAction({
+      type: 'legendSelect',
+      name: 'sss'
+      // seriesIndex: ev.seriesIndex,
+      // dataIndex: ev.dataIndex
+    });
+
+
+    if (!this.t1Selected) {
+      this.t1 = parseFloat(ev.name).toFixed(3);
+      this.t2 = 0;
+      this.deltaT = 0;
       this.t1Selected = true;
       this.t2Selected = false;
     }
-    else{
-      this.t2 = ev.value
+    else {
+      this.t2 = parseFloat(ev.name).toFixed(3);
       this.t2Selected = true;
       this.deltaT = parseFloat((parseFloat(this.t2) - parseFloat(this.t1)).toFixed(3));
       this.deltaTSelected = true;
       this.t1Selected = false;
     }
-    this.echartsInstance._api.dispatchAction({
-      type: 'select',
-  
-      // Find  by index or id or name.
-      // Can be an array to find multiple components.
-      // seriesIndex?: number | number[],
-      // seriesId?: string | string[],
-      // seriesName?: string | string[],
-  
-      // data index; could assign by name attribute when not defined
-       dataIndex: ev.dataIndex,
-      // optional; data name; ignored when dataIndex is defined
-      // name?: string | string[],
-  })
+    // this.echartsInstance._api.dispatchAction({
+    //   type: 'select',
+
+    //   // Find  by index or id or name.
+    //   // Can be an array to find multiple components.
+    //   // seriesIndex?: number | number[],
+    //   // seriesId?: string | string[],
+    //   // seriesName?: string | string[],
+
+    //   // data index; could assign by name attribute when not defined
+    //   dataIndex: ev.dataIndex,
+    //   // optional; data name; ignored when dataIndex is defined
+    //   // name?: string | string[],
+    // })
   }
 }
