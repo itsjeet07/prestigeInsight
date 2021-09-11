@@ -20,6 +20,7 @@ $custom-typography: mat-typography-config(
 @include angular-material-typography($custom-typography);
 
 .button {
+    color: black;
     user-select: none;
     cursor: pointer;
     outline: none;
