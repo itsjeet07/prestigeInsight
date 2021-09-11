@@ -51,31 +51,6 @@ table {
   overflow: auto;
 }
 
-.button {
-  user-select: none;
-  cursor: pointer;
-  outline: none;
-  box-sizing: border-box;
-  position: relative;
-  min-width: 64px;
-  line-height: 36px;
-  border: none;
-  display: inline-block;
-  white-space: nowrap;
-  text-decoration: none;
-  vertical-align: baseline;
-  text-align: center;
-  margin: 0;
-  min-width: 64px;
-  line-height: 36px;
-  padding: 0 16px;
-  border-radius: 4px;
-  overflow: visible;
-  background-color: #fff;
-
-  color: black;
-}
-
 .table-cell {
   &:hover,
   &:active {

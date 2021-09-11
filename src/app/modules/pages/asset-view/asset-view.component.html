@@ -5,22 +5,51 @@
   </div>
 </section>
 <div fxLayoutAlign="center" class="stats-cards">
-  <mat-card fxFlex="100">
+  <mat-card fxFlex="100" fxLayout="row">
 
-    <div style="text-align: center;">
-      <img class="imgBox" src="https://manageimages-qa.s3.amazonaws.com/1631094309975-587564773.jpg">
-      <div>
-        <label>name</label>
+    <mat-card fxFlex="40" fxLayoutAlign="left" fxLayout="column" fxLayoutGap="20px" style="padding : 0px 10px 0px 0px;">
+      <mat-card fxFlex="60" class="setFocus">
+        <label>Asset Name: </label>
+        <label *ngIf="apiData == ''">Fetching...</label>
+        <label *ngIf="apiData != ''">{{apiData.asset_card_data.asset_name}}</label>
+      </mat-card>
+      <mat-card fxFlex="60" class="setFocus">
+        <label>Asset Type: </label>
+        <label *ngIf="apiData == ''">Fetching...</label>
+        <label *ngIf="apiData != ''">{{apiData.asset_card_data.asset_type}}</label>
+      </mat-card>
+      <mat-card fxFlex="60" class="setFocus">
+        <label>Asset Make: </label>
+        <label *ngIf="apiData == ''">Fetching...</label>
+        <label *ngIf="apiData != ''">{{apiData.asset_card_data.asset_make}}</label>
+      </mat-card>
+    </mat-card>
+
+    <mat-card fxFlex="40" fxLayoutAlign="left" fxLayout="column" fxLayoutGap="20px" style="padding : 0px 10px 0px 0px;">
+      <mat-card fxFlex="28" class="setFocus">
+        <label>Asset Model: </label>
+        <label *ngIf="apiData == ''">Fetching...</label>
+        <label *ngIf="apiData != ''">{{apiData.asset_card_data.asset_model}}</label>
+      </mat-card>
+      <mat-card fxFlex="28" class="setFocus">
+        <label>Asset Class Type: </label>
+        <label *ngIf="apiData == ''">Fetching...</label>
+        <label *ngIf="apiData != ''">{{apiData.asset_card_data.asset_class_type}}</label>
+      </mat-card>
+      <!-- <mat-card fxFlex="60" class="setFocus">
+        <label>Asset Model: </label>
+        <label>{{apiData.asset_card_data.asset_model}}</label>
+      </mat-card> -->
+    </mat-card>
+
+    <mat-card fxFlex="20" fxLayoutAlign="center">
+      <label *ngIf="apiData == ''">Fetching Image...</label>
+      <div style="text-align: center;" *ngIf="apiData !='' && isImage">
+        <img class="imgBox setFocus" src={{apiData.asset_card_data.image}} (error)="resetImg()"
+          alt={{apiData.asset_card_data.asset_name}}>
       </div>
-      <br>
-      <div>
-        <label>pump</label>
-      </div>
-      <br>
-      <div>
-        <label>model</label>
-      </div>
-    </div>
+      <label *ngIf="!isImage">No Image To Load...</label>
+    </mat-card>
   </mat-card>
 
 </div>
@@ -28,13 +57,14 @@
 
 <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="20px" class="stats-cards">
   <mat-card fxFlex="100" fxLayoutAlign="center">
-    <label *ngIf='devices.length==0'>Fetching Devices...</label>
-    <button mat-flat-button *ngFor="let device of devices" [color]="device === selectedObj.device ? 'primary':'grey'"
+    <label *ngIf="devices.length == 0">Fetching Devices...</label>
+    <button class="button setFocus" *ngFor="let device of devices"
+      [ngClass]="device == selectedObj.device ? 'selected':'deSelected'"
       (click)="changeDevice(device)">{{device}}</button>
   </mat-card>
 </div>
 
-<mat-tab-group mat-align-tabs="left" *ngIf='devices.length>0'>
+<mat-tab-group mat-align-tabs="center" *ngIf='devices.length>0'>
   <mat-tab label="Asset Health">
 
   </mat-tab>
@@ -42,16 +72,16 @@
   <mat-tab label="Vibration">
     <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="20px" class="stats-cards">
       <mat-card fxFlex="100" fxLayoutAlign="center">
-        <button mat-flat-button *ngFor="let axis of axisList" [color]="axis === selectedObj.axis ? 'primary':'grey'"
-          (click)="changeAxis(axis)">{{axis}}</button>
+        <button class="button setFocus" *ngFor="let axis of axisList"
+          [ngClass]="axis === selectedObj.axis ? 'selected':'deSelected'" (click)="changeAxis(axis)">{{axis}}</button>
       </mat-card>
     </div>
     <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="20px" class="stats-cards">
 
       <mat-card fxFlex="100" fxLayoutAlign="center">
-        <button mat-flat-button [color]="chart2Selection.domain === 'amplitude' ? 'primary':''"
+        <button class="button setFocus" [ngClass]="chart2Selection.domain === 'amplitude' ? 'selected':'deSelected'"
           (click)="changeDomain('amplitude')">Time</button>
-        <button mat-flat-button [color]="chart2Selection.domain === 'frequency' ? 'primary':''"
+        <button class="button setFocus" [ngClass]="chart2Selection.domain === 'frequency' ? 'selected':'deSelected'"
           (click)="changeDomain('frequency')">Frequency</button>
 
       </mat-card>
@@ -150,7 +180,7 @@
           </div>
         </section>
         <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px" class="stats-cards">
-          <mat-card fxFlex="50" *ngIf="loadingDisplacement">
+          <mat-card fxFlex="100" *ngIf="loadingDisplacement">
             <span class="loadingText">Loading...</span>
           </mat-card>
           <mat-card fxFlex="100" *ngIf="!loadingDisplacement">

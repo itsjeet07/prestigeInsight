@@ -117,8 +117,6 @@ export class LineChartComponent implements OnInit, OnChanges {
   }
 
   onChartClick(ev) {
-    console.log('zzzzzzzzzzzxxxxxxxxxxx', this.echartsInstance._api.dispatchAction)
-
     this.echartsInstance._api.dispatchAction({
       type: 'legendSelect',
       name: 'sss'

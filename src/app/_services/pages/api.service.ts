@@ -102,6 +102,10 @@ export class ApiService {
   //API for harmonics data
   getHarmonicsData(data) {
     return this.http.post<any>(`${this.apiUrl}` + `get_harmonics_data/`, data)
-
   }
+
+  //for assetDetails
+  getAssetDetails(data) {
+    return this.http.post<any>(`${this.apiUrl}` + 'asset_data/', data)
+  };
 }

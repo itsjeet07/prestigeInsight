@@ -39,7 +39,7 @@ export class AssetViewComponent implements OnInit {
   }
   chartColors = ['#5470c6', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'];
   currentId: number;
-  devices = [];
+  devices: any[] = [];
   axisList = ['x', 'y', 'z'];
   stFunctionList = {
     velocity_rms: "Velocity RMS",
@@ -66,7 +66,7 @@ export class AssetViewComponent implements OnInit {
   chart4Selection = {
     domain: 'amplitude'
   }
-  apiData: any;
+  apiData: any = '';
   deviceData: any;
   accelerationData: any;
   accelerationChartData: any;
@@ -80,6 +80,7 @@ export class AssetViewComponent implements OnInit {
   loadingAcceleration: boolean = false;
   RMSChartData: any;
   RMSData: any;
+  isImage = true;
 
 
   domain = 'amplitude';
@@ -105,7 +106,18 @@ export class AssetViewComponent implements OnInit {
   }
 
   ngOnInit() {
-    //this.getVelocity();
+    // this.getAssetDetails();
+  }
+
+  // getAssetDetails() {
+  //   const data = { equipment_id: this.currentId }
+  //   this.apiService.getAssetDetails(data).subscribe(res => {
+
+  //   })
+  // }
+
+  resetImg() {
+    this.isImage = false;
   }
 
   getAssetData(id) {
