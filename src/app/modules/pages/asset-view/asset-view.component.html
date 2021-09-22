@@ -1,0 +1,378 @@
+<section class="headerSection">
+  <div class="example-label">Asset Details</div>
+  <div class="example-label"></div>
+  <div class="example-button-row">
+  </div>
+</section>
+<div fxLayoutAlign="center" class="stats-cards">
+  <mat-card fxFlex="100" fxLayout="row">
+
+    <mat-card fxFlex="40" fxLayoutAlign="left" fxLayout="column" fxLayoutGap="20px" style="padding : 0px 10px 0px 0px;">
+      <mat-card fxFlex="100" class="setFocus" fxLayout="column">
+
+        <table>
+          <tr>
+            <td style="width:'150px'"><label>Asset Name: </label></td>
+            <td>
+              <label *ngIf="apiData == ''">Fetching...</label>
+              <label *ngIf="apiData != ''">{{apiData.asset_card_data.asset_name}}</label>
+            </td>
+          </tr>
+          <br>
+          <tr>
+            <td style="width:'150px'"><label>Asset Type: </label></td>
+            <td>
+              <label *ngIf="apiData == ''">Fetching...</label>
+              <label *ngIf="apiData != ''">{{apiData.asset_card_data.asset_type}}</label>
+          </tr>
+          <br>
+
+          <tr>
+            <td style="width:'150px'"><label>Asset Make: </label></td>
+            <td>
+              <label *ngIf="apiData == ''">Fetching...</label>
+              <label *ngIf="apiData != ''">{{apiData.asset_card_data.asset_make}}</label>
+            </td>
+          </tr>
+          <br>
+
+          <tr>
+            <td style="width:'150px'"><label>Asset Model: </label></td>
+            <td>
+              <label *ngIf="apiData == ''">Fetching...</label>
+              <label *ngIf="apiData != ''">{{apiData.asset_card_data.asset_model}}</label>
+            </td>
+          </tr>
+          <br>
+
+          <tr>
+            <td style="width:'150px'"><label>Asset Class Type: </label></td>
+            <td>
+              <label *ngIf="apiData == ''">Fetching...</label>
+              <label *ngIf="apiData != ''">{{apiData.asset_card_data.asset_class_type}}</label>
+            </td>
+          </tr>
+          <br>
+
+        </table>
+      </mat-card>
+    </mat-card>
+
+    <mat-card fxFlex="40" fxLayoutAlign="left" fxLayout="column" fxLayoutGap="20px" style="padding : 0px 10px 0px 0px;">
+
+    </mat-card>
+
+    <mat-card fxFlex="20" fxLayoutAlign="center">
+      <label *ngIf="apiData == ''">Fetching Image...</label>
+      <div style="text-align: center;" *ngIf="apiData !='' && isImage">
+        <img class="imgBox setFocus" src={{apiData.asset_card_data.image}} (error)="resetImg()"
+          alt={{apiData.asset_card_data.asset_name}}>
+      </div>
+      <label *ngIf="!isImage">No Image To Load...</label>
+    </mat-card>
+  </mat-card>
+
+</div>
+<br>
+
+<div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="20px" class="stats-cards">
+  <mat-card fxFlex="100" fxLayoutAlign="center">
+    <label *ngIf="devices.length == 0">Fetching Devices...</label>
+    <button class="button setFocus" *ngFor="let device of devices"
+      [ngClass]="device.device_key == selectedObj.device ? 'selected':'deSelected'"
+      (click)="changeDevice(device.device_key)">{{device?.device_key}}</button>
+  </mat-card>
+</div>
+
+<mat-tab-group mat-align-tabs="center" *ngIf='devices.length>0'>
+  <mat-tab label="Asset Health">
+    <section class="headerSection">
+      <div class="example-label">Asset Health</div>
+    </section>
+    <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px" class="stats-cards">
+      <mat-card fxFlex="100">
+        <app-widget-scatter-chart [data]="assetHealthChartData"></app-widget-scatter-chart>
+      </mat-card>
+    </div>
+
+  </mat-tab>
+
+  <mat-tab label="Vibration">
+    <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="20px" class="stats-cards">
+      <mat-card fxFlex="100" fxLayoutAlign="center">
+        <button class="button setFocus" *ngFor="let axis of axisList"
+          [ngClass]="axis === selectedObj.axis ? 'selected':'deSelected'" (click)="changeAxis(axis)">{{axis}}</button>
+      </mat-card>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="20px" class="stats-cards">
+
+      <mat-card fxFlex="100" fxLayoutAlign="center">
+        <button class="button setFocus" [ngClass]="chart2Selection.domain === 'amplitude' ? 'selected':'deSelected'"
+          (click)="changeDomain('amplitude')">Time</button>
+        <button class="button setFocus" [ngClass]="chart2Selection.domain === 'frequency' ? 'selected':'deSelected'"
+          (click)="changeDomain('frequency')">Frequency</button>
+
+      </mat-card>
+    </div>
+    <mat-tab-group mat-align-tabs="center" (selectedTabChange)="changeTabType($event)">
+      <mat-tab label="Acceleration">
+        <section class="headerSection" *ngIf="accelerationData">
+          <div class="example-label">Acceleration</div>
+          <div class="example-label" fxLayoutAlign="space-between right">
+            <div fxFlex="25">
+              <div class="example-button-row" *ngIf="chart2Selection.domain === 'frequency'">
+                <button class="button setFocus" style="background-color: #4c8bf5;"
+                  (click)="getHarmonicsData('acceleration')" [disabled]='loadingAcceleration'>Toggle Harmonics</button>
+              </div>
+            </div>
+            <div fxFlex="50">
+              <div class="example-button-row">
+                <mat-form-field>
+                  <mat-label>Enter a date range</mat-label>
+                  <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+                    <input matStartDate formControlName="start" placeholder="Start date">
+                    <input matEndDate formControlName="end" placeholder="End date">
+                  </mat-date-range-input>
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-date-range-picker #picker></mat-date-range-picker>
+                </mat-form-field>
+                &nbsp;
+                <button class="button setFocus" style="background-color:#4c8bf5"
+                  (click)="rangeFilter(true)">Filter</button>
+              </div>
+            </div>
+            <div fxFlex="25">
+              <button mat-button [matMenuTriggerFor]="menuAccTimeStamp" aria-label="Example icon-button with a menu">
+                {{accelerationData.timestamp * 1000 | date:'short':'UTC'}} <mat-icon>arrow_drop_down</mat-icon>
+              </button>
+              <mat-menu #menuAccTimeStamp="matMenu">
+                <button mat-menu-item *ngFor="let timestamp of accelerationData.timestamp_list"
+                  (click)="changeAccTime(timestamp)">
+                  <span>{{timestamp * 1000 | date:'short':'UTC'}}</span>
+                </button>
+              </mat-menu>
+            </div>
+          </div>
+        </section>
+        <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px" class="stats-cards">
+          <mat-card class="loadingText" fxFlex="100" *ngIf="loadingAcceleration">
+            <span>Loading...</span>
+          </mat-card>
+          <mat-card fxFlex="100" *ngIf="!loadingAcceleration">
+            <app-widget-line-chart [data]="accelerationChartData"></app-widget-line-chart>
+          </mat-card>
+        </div>
+        <br />
+      </mat-tab>
+
+      <mat-tab label="Velocity">
+        <section class="headerSection" *ngIf="velocityData">
+          <div class="example-label">Velocity</div>
+          <div class="example-label" fxLayoutAlign="space-between center">
+            <div fxFlex="25">
+              <div class="example-button-row" *ngIf="chart3Selection.domain === 'frequency'">
+                <button mat-flat-button (click)="getHarmonicsData('velocity')" [disabled]='loadingVelocity'>Toggle
+                  Harmonics</button>
+              </div>
+            </div>
+            <div fxFlex="50">
+              <div class="example-button-row">
+                <mat-form-field>
+                  <mat-label>Enter a date range</mat-label>
+                  <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+                    <input matStartDate formControlName="start" placeholder="Start date">
+                    <input matEndDate formControlName="end" placeholder="End date">
+                  </mat-date-range-input>
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-date-range-picker #picker></mat-date-range-picker>
+                </mat-form-field>
+                &nbsp;
+                <button class="button setFocus" style="background-color:#4c8bf5"
+                  (click)="rangeFilter(true)">Filter</button>
+              </div>
+            </div>
+
+            <div fxFlex="25">
+              <button mat-button [matMenuTriggerFor]="menuVelTimeStamp" aria-label="Example icon-button with a menu">
+                {{velocityData.timestamp * 1000 | date:'short':'UTC'}} <mat-icon>arrow_drop_down</mat-icon>
+              </button>
+              <mat-menu #menuVelTimeStamp="matMenu">
+                <button mat-menu-item *ngFor="let timestamp of velocityData.timestamp_list"
+                  (click)="changeVelTime(timestamp)">
+                  <span>{{timestamp * 1000 | date:'short':'UTC'}}</span>
+                </button>
+              </mat-menu>
+            </div>
+          </div>
+        </section>
+        <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px" class="stats-cards">
+          <mat-card fxFlex="100" *ngIf="loadingVelocity">
+            <span class="loadingText">Loading...</span>
+          </mat-card>
+          <mat-card fxFlex="100" *ngIf="!loadingVelocity">
+            <app-widget-line-chart [data]="velocityChartData"></app-widget-line-chart>
+          </mat-card>
+        </div>
+        <br />
+      </mat-tab>
+      <mat-tab label="Displacement">
+        <section class="headerSection" *ngIf="displacementData">
+          <div class="example-label">Displacement</div>
+          <div class="example-label" fxLayoutAlign="space-between center">
+            <div fxFlex="25">
+              <div class="example-button-row" *ngIf="chart4Selection.domain === 'frequency'">
+                <button mat-flat-button (click)="getHarmonicsData('displacement')"
+                  [disabled]='loadingDisplacement'>Toggle Harmonics</button>
+              </div>
+            </div>
+            <div fxFlex="50">
+              <div class="example-button-row">
+                <mat-form-field>
+                  <mat-label>Enter a date range</mat-label>
+                  <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+                    <input matStartDate formControlName="start" placeholder="Start date">
+                    <input matEndDate formControlName="end" placeholder="End date">
+                  </mat-date-range-input>
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-date-range-picker #picker></mat-date-range-picker>
+                </mat-form-field>
+                &nbsp;
+                <button class="button setFocus" style="background-color:#4c8bf5"
+                  (click)="rangeFilter(true)">Filter</button>
+              </div>
+            </div>
+            <div fxFlex="25">
+              <button mat-button [matMenuTriggerFor]="menuDisTimeStamp" aria-label="Example icon-button with a menu">
+                {{displacementData.timestamp * 1000 | date:'short':'UTC'}} <mat-icon>arrow_drop_down</mat-icon>
+              </button>
+              <mat-menu #menuDisTimeStamp="matMenu">
+                <button mat-menu-item *ngFor="let timestamp of displacementData.timestamp_list"
+                  (click)="changeDisTime(timestamp)">
+                  <span>{{timestamp * 1000 | date:'short':'UTC'}}</span>
+                </button>
+              </mat-menu>
+            </div>
+          </div>
+        </section>
+        <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px" class="stats-cards">
+          <mat-card fxFlex="100" *ngIf="loadingDisplacement">
+            <span class="loadingText">Loading...</span>
+          </mat-card>
+          <mat-card fxFlex="100" *ngIf="!loadingDisplacement">
+            <app-widget-line-chart [data]="displacementChartData"></app-widget-line-chart>
+          </mat-card>
+
+        </div>
+        <br />
+      </mat-tab>
+    </mat-tab-group>
+    <section class="headerSection">
+      <div class="example-label">Statistical Function</div>
+      <div class="example-label" fxLayoutAlign="space-between right">
+        <div fxFlex="50">
+          <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+            {{stFunctionList[chart1Selection.stFunction]}} <mat-icon>arrow_drop_down</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="changeStFunction('velocity_rms')">
+              <span>Velocity RMS</span>
+            </button>
+            <button mat-menu-item (click)="changeStFunction('peak')">
+              <span>Peak</span>
+            </button>
+            <button mat-menu-item (click)="changeStFunction('peak_to_peak')">
+              <span>Peak to Peak</span>
+            </button>
+          </mat-menu>
+        </div>
+        <div fxFlex="50">
+          <div class="example-button-row">
+            <mat-form-field>
+              <mat-label>Enter a date range</mat-label>
+              <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+                <input matStartDate formControlName="start" placeholder="Start date">
+                <input matEndDate formControlName="end" placeholder="End date">
+              </mat-date-range-input>
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-date-range-picker #picker></mat-date-range-picker>
+            </mat-form-field>
+            &nbsp;
+            <button class="button setFocus" style="background-color:#4c8bf5" (click)="rangeFilter(true)">Filter</button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px" class="stats-cards">
+      <mat-card fxFlex="100">
+        <app-widget-scatter-chart [data]="RMSChartData"></app-widget-scatter-chart>
+      </mat-card>
+    </div>
+
+
+  </mat-tab>
+
+  <mat-tab label="Acoustics">
+
+  </mat-tab>
+
+  <mat-tab label="Temprature">
+
+  </mat-tab>
+
+  <!-- <mat-tab label="Asset Health">
+
+  </mat-tab> -->
+</mat-tab-group>
+
+
+
+
+
+
+
+<!-- <section class="headerSection">
+  <div class="example-label">Statistical Function</div>
+  <div class="example-label" fxLayoutAlign="space-between right">
+    <div fxFlex="50">
+      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+        {{stFunctionList[chart1Selection.stFunction]}} <mat-icon>arrow_drop_down</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="changeStFunction('velocity_rms')">
+          <span>Velocity RMS</span>
+        </button>
+        <button mat-menu-item (click)="changeStFunction('peak')">
+          <span>Peak</span>
+        </button>
+        <button mat-menu-item (click)="changeStFunction('peak_to_peak')">
+          <span>Peak to Peak</span>
+        </button>
+      </mat-menu>
+    </div>
+    <div fxFlex="50">
+      <div class="example-button-row">
+        <mat-form-field appearance="fill">
+          <mat-label>Enter a date range</mat-label>
+          <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+            <input matStartDate formControlName="start" placeholder="Start date">
+            <input matEndDate formControlName="end" placeholder="End date">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+
+        <button mat-flat-button color="primary" (click)="rangeFilter(true)">Filter</button>
+      </div>
+    </div>
+  </div>
+</section>
+<div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px" class="stats-cards">
+  <mat-card fxFlex="100">
+    <app-widget-scatter-chart [data]="RMSChartData"></app-widget-scatter-chart>
+  </mat-card>
+</div> -->
+<br />
+
+
+
+<mat-divider></mat-divider>

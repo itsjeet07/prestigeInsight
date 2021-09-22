@@ -1,0 +1,27 @@
+<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
+
+    <mat-card class="box">
+      <mat-card-header>
+        <img class="logo" src="/assets/images/presageLogoSubmit-Wbackground.png">
+      </mat-card-header>
+      <mat-card-header>
+        <mat-card-title>Log in</mat-card-title>
+      </mat-card-header>
+  
+      <form [formGroup]="loginForm" (ngSubmit)="doLogin()">
+        <mat-card-content>
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="Username" type="email" formControlName="username">
+          </mat-form-field>
+          <div class="w3-panel w3-red"  *ngIf="loginForm.controls.username.invalid && (loginForm.controls.username.dirty || loginForm.controls.username.touched)">Please enter valid email address</div> 
+  
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="Password" type="password" formControlName="password">
+          </mat-form-field>
+          <div class="w3-panel w3-red"  *ngIf="loginForm.controls.password.invalid && (loginForm.controls.password.dirty || loginForm.controls.password.touched)">Password is required</div>
+        </mat-card-content>
+        <button  mat-raised-button color="primary" class="btn-block" type="submit" [disabled]="!loginForm.valid">Log in</button>
+      </form>
+    </mat-card>
+  
+  </div>

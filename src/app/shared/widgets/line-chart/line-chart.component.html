@@ -1,0 +1,15 @@
+<div class="deltaTDiv" *ngIf="showDeltaT">
+
+    <strong>T1 = </strong>
+    <span>{{t1}}, </span>
+    &nbsp;
+
+    <strong>T2 = </strong>
+    <span>{{t2}},</span>
+    &nbsp;
+
+    <strong>&Delta;T = </strong>
+    <span>{{deltaT}}</span>
+</div>
+<div echarts [options]="chartOptions" (chartClick)="onChartClick($event)" (chartInit)="onChartInit($event)"
+    class="line-chart"></div>
