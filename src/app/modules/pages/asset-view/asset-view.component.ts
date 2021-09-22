@@ -3,6 +3,7 @@ import { ApiService } from 'src/app/_services/pages/api.service';
 import { RouterModule, Routes, Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import * as moment from 'moment';
 
 interface IdeviceRequest {
   device_id: string,
@@ -81,6 +82,8 @@ export class AssetViewComponent implements OnInit {
   RMSChartData: any;
   RMSData: any;
   isImage = true;
+  isHarmonic = false;
+  assetHealthChartData: any;
 
 
   domain = 'amplitude';
@@ -106,15 +109,23 @@ export class AssetViewComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.getAssetDetails();
+    this.getAssetHealthScore();
   }
 
-  // getAssetDetails() {
-  //   const data = { equipment_id: this.currentId }
-  //   this.apiService.getAssetDetails(data).subscribe(res => {
-
-  //   })
-  // }
+  getAssetHealthScore() {
+    const data = { asset_id: this.currentId }
+    this.apiService.getAssetHealthScore(data).subscribe(
+      (res) => {
+        const chartData = [];
+        res.asset_score.map((v, i) => {
+          chartData.push([moment(new Date(res.timestamps[i]), "M/D/YYYY H:mm").unix(), v]);
+        });
+        this.assetHealthChartData = {
+          chartData: chartData,
+          name: 'AssetHealth'
+        };
+      });
+  };
 
   resetImg() {
     this.isImage = false;
@@ -296,46 +307,54 @@ export class AssetViewComponent implements OnInit {
 
 
   getHarmonicsData(fnType) {
-    console.log('getHarmonicsData', fnType)
-    let waveType = this.chart4Selection.domain;
-    let timeStamp = this.displacementData.timestamp;
-    if (fnType === 'acceleration') {
-      waveType = this.chart2Selection.domain
-      timeStamp = this.accelerationData.timestamp
-    }
-    if (fnType === 'velocity') {
-      waveType = this.chart3Selection.domain
-      timeStamp = this.velocityData.timestamp
-    }
-    let reqObj = {
-      device_id: this.selectedObj.device,
-      data_type: fnType,
-      wave_type: waveType,
-      timestamp: timeStamp,
-      axis: this.selectedObj.axis
-    }
-    this.apiService.getHarmonicsData(reqObj).subscribe(
-      (res) => {
-        if (res) {
-          if (fnType === 'acceleration') {
-            this.accelerationData.harmonics = res.data;
-            this.drawAccelerationChart(true)
-          }
-          else if (fnType === 'velocity') {
-            this.velocityData.harmonics = res.data;
-            this.drawVelocityChart(true)
-          }
-          else {
-            this.displacementData.harmonics = res.data;
-            this.drawDisplacementChart(true)
-          }
-          console.log(res);
-        }
-      },
-      (error) => {
-        console.log('Error velocity', error);
+    this.isHarmonic = !this.isHarmonic;
+    if (this.isHarmonic) {
+      let waveType = this.chart4Selection.domain;
+      let timeStamp = this.displacementData.timestamp;
+      if (fnType === 'acceleration') {
+        this.loadingAcceleration = true;
+        waveType = this.chart2Selection.domain
+        timeStamp = this.accelerationData.timestamp
       }
-    )
+      if (fnType === 'velocity') {
+        this.loadingVelocity = true;
+        waveType = this.chart3Selection.domain
+        timeStamp = this.velocityData.timestamp
+      }
+      let reqObj = {
+        device_id: this.selectedObj.device,
+        data_type: fnType,
+        wave_type: waveType,
+        timestamp: timeStamp,
+        axis: this.selectedObj.axis
+      }
+      this.apiService.getHarmonicsData(reqObj).subscribe(
+        (res) => {
+          if (res) {
+            if (fnType === 'acceleration') {
+              this.loadingAcceleration = false;
+              this.accelerationData.harmonics = res.data;
+              this.drawAccelerationChart(true)
+            }
+            else if (fnType === 'velocity') {
+              this.loadingVelocity = false;
+              this.velocityData.harmonics = res.data;
+              this.drawVelocityChart(true)
+            }
+            else {
+              this.loadingDisplacement = false;
+              this.displacementData.harmonics = res.data;
+              this.drawDisplacementChart(true)
+            }
+          }
+        },
+        (error) => {
+          console.log('Error velocity', error);
+        }
+      )
+    } else {
+      this.changeAxis(this.selectedObj.axis)
+    }
   }
 
   formatResponse(res) {

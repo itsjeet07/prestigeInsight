@@ -108,4 +108,9 @@ export class ApiService {
   getAssetDetails(data) {
     return this.http.post<any>(`${this.apiUrl}` + 'asset_data/', data)
   };
+
+  //get AssetHealthScore
+  getAssetHealthScore(data) {
+    return this.http.post<any>(`${this.apiUrl}` + 'asset_health_score/', data)
+  };
 }
